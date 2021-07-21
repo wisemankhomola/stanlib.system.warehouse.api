@@ -10,35 +10,117 @@
 	<name>stanlib.system.warehouse.api</name>
 
 	<properties>
+			<app.runtime>4.3.0</app.runtime>
+		<mule.maven.plugin.version>3.1.6</mule.maven.plugin.version>
+		<mule.version>4.3.0</mule.version>
+		<mule.tools.version>1.3</mule.tools.version>
+		<munit.version>2.1.3</munit.version>
+		<mule.munit.support.version>${mule.version}</mule.munit.support.version>
+		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
+		<mule.skip.deploy>false</mule.skip.deploy>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<app.runtime>4.3.0-20210622</app.runtime>
-		<mule.maven.plugin.version>3.5.1</mule.maven.plugin.version>
+		<url.repo>https://repo.com/</url.repo>
+		<anypoint.platform.env>Dev</anypoint.platform.env>
+		<anypoint.platform.appversion>v1</anypoint.platform.appversion>
+		<scm.connection>scm:git:http://${url.repo}/mule/${project.artifactId}.git</scm.connection>
+		<mule.environment>dev</mule.environment>
+		<application.name>${anypoint.platform.env}-${project.artifactId}</application.name>
 	</properties>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.0.0</version>
-			</plugin>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<sharedLibraries>
-						<sharedLibrary>
-							<groupId>mysql</groupId>
-							<artifactId>mysql-connector-java</artifactId>
-						</sharedLibrary>
-					</sharedLibraries>
+					<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<muleVersion>${mule.version}</muleVersion>
+						<username>${anypoint.platform.username}</username>
+						<password>${anypoint.platform.password}</password>
+						<applicationName>${application.name}</applicationName>
+						<environment>${anypoint.platform.environment}</environment>
+						<businessGroupId>${anypoint.platform.businessgroupid}</businessGroupId>
+						<region>${anypoint.platform.region}</region>
+						<workerType>${anypoint.platform.workertype}</workerType>						
+						<properties>						
+							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com/</anypoint.platform.analytics_base_uri>
+							<anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
+							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
+							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+							<mule.environment>${mule.environment}</mule.environment>
+							<mule.client_id>${mule.client_id}</mule.client_id>
+							<mule.client_secret>${mule.client_secret}</mule.client_secret>
+						</properties>	
+					</cloudHubDeployment>
+					<executions>
+						<execution>
+							<id>deploy</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+						</execution>
+					</executions>
+					<classifier>mule-application</classifier>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<formats>
+							<format>html</format>
+						</formats>
+					</coverage>
+					<resources>
+						<resource>
+							<directory>src/main/resources</directory>
+						</resource>
+					</resources>
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.mule.tools.maven</groupId>
+					<artifactId>mule-app-maven-plugin</artifactId>
+					<version>${mule.tools.version}</version>
+					<extensions>true</extensions>
+					<configuration>
+						<copyToAppsDirectory>true</copyToAppsDirectory>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.mule.tools.maven</groupId>
+					<artifactId>mule-maven-plugin</artifactId>
+					<version>${mule.maven.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.7</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		
 	</build>
 
 	<dependencies>
@@ -92,9 +174,9 @@
 
 	<repositories>
 		<repository>
-			<id>anypoint-exchange-v2</id>
+			<id>anypoint-exchange</id>
 			<name>Anypoint Exchange</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v2/maven</url>
+			<url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
 			<layout>default</layout>
 		</repository>
 		<repository>
