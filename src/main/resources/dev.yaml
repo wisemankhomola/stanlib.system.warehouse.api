@@ -1,0 +1,23 @@
+application:
+ name: "stanlib-system-warehouse.api"
+api:
+ name: "stanlib-system-warehouse.api"
+ id: "0"
+ version: "v1"
+ http:
+  listener:
+   path: "/v1/*"
+   host: "0.0.0.0"
+   port: "8094"
+
+jks:
+  alias: "api-lb-test"
+
+tlc_sqldb:
+  host: "196.8.152.45"
+  port: "1433"
+  user: "mulesoft"
+  password: "razipi85"
+  instanceName: "Slbsqltst308v"
+  databaseName: "TLCRetail"
+  schema : "dbo"

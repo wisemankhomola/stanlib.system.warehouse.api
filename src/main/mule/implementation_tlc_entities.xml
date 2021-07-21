@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="queryChangedEntities" doc:id="4e493e88-df58-416a-bd2a-bd4544e1d258" >
+		<db:select doc:name="Select changed entities" doc:id="b4b4aeb4-fb0a-4937-92c7-c10e8ff55e79" config-ref="Database_Config">
+			<db:sql><![CDATA[#["select entityno
+from   [online].v_svoclient_person
+where  entityType = 1
+and           entityno in 
+(
+              select entityno
+              from   vwEntity
+              where  clientind = 'Y'
+              and           datecreated between '" ++ vars.startDate as String ++ "' and '" ++ vars.endDate as String ++ "'
+              union
+              select clientno
+              from   vwClientacc
+              where  datecreated between  '" ++ vars.startDate as String ++ "' and '" ++ vars.endDate as String ++ "')"]
+]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Create response message" doc:id="82f032ad-3ca2-4605-a7c2-5d945d961210">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map
+{
+	entityNumber : $.entityno
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<flow name="implementation_tlc_changedentitiesFlow" doc:id="56529a9c-f579-42d5-a0d5-0ada06091400" >
+		<logger level="INFO" doc:name="Log Call Start" doc:id="258a6709-8ecb-4ff0-b591-da0a4865bf77" message="Started: Select changed enteties from DB" category="Flow Tracking" />
+		<db:select doc:name="Select Start, End date" doc:id="5c3e2dee-9736-4952-9e9f-f75f3c2b3d8a" config-ref="Database_Config" target="dates">
+			<db:sql ><![CDATA[select top 1  convert(varchar, startdate, 23) startdate , convert(varchar, enddate, 23) enddate
+from   vwControltotal
+order by startdate, enddate desc
+]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Extract Dates from Result" doc:id="2a1521c9-9d53-4fd4-bfb1-0b2c0dcaa549">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="startDate"><![CDATA[%dw 2.0
+output application/java
+---
+vars.dates.startdate[0] as String
+]]></ee:set-variable>
+				<ee:set-variable variableName="endDate"><![CDATA[%dw 2.0
+output application/java
+---
+vars.dates.enddate[0] as String
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Query Changed Entities" doc:id="51f845bd-e5df-4985-bda2-82970a26bf74" name="queryChangedEntities" />
+		<logger level="INFO" doc:name="Log Call Completed" doc:id="f0bac394-2b3a-45a3-8f5c-8a7155b80661" message="Completed: Select changed enteties from DB" category="Flow Tracking"/>
+	</flow>
+	<flow name="implementation_tlc_changedentitiesDatesFlow" doc:id="e0b355cd-4174-4735-86a4-795ff8b87969" >
+		<logger level="INFO" doc:name="Log Call Start" doc:id="fb2a6457-f829-4965-a4c7-b63aa875b08b" message="Started: Select changed enteties from DB" category="Flow Tracking" />
+		<ee:transform doc:name="Extract Query params" doc:id="90faf9f3-c901-4c2f-b07e-922ebaa36775">
+			<ee:message>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="startDate" ><![CDATA[%dw 2.0
+output application/json
+---
+attributes.queryParams.startDate
+]]></ee:set-variable>
+				<ee:set-variable variableName="endDate" ><![CDATA[%dw 2.0
+output application/json
+---
+attributes.queryParams.endDate
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<validation:is-time doc:name="StartDateValidation" doc:id="913d222f-0ef3-4acf-ac0f-befc31e4dd0a" time="#[vars.startDate]" pattern="yyyy-dd-MM" message="StartDate is not of pattern yyyy-dd-MM" config-ref="Validation_Config"/>
+		<validation:is-time doc:name="EndDateValidation" doc:id="88342ae3-52dd-4ddb-9efa-13f9cb8af115" time="#[vars.endDate]" pattern="yyyy-dd-MM" message="EndDate is not of pattern yyyy-dd-MM" config-ref="Validation_Config"/>
+		<flow-ref doc:name="Query Changed Entities" doc:id="610fcab5-79d3-4226-a39b-9c529325a1b8" name="queryChangedEntities" />
+		<logger level="INFO" doc:name="Log Call Completed" doc:id="bcd10ade-4933-4524-96fb-de3a6ac4f8e8" message="Completed: Select changed enteties from DB" category="Flow Tracking" />
+	</flow>
+	<flow name="implementation_tlc_unsyncedentitiesFlow" doc:id="98273863-bd7e-4114-b9a0-afeb4b609f7a" >
+		<logger level="INFO" doc:name="Log Call Start" doc:id="3aff1ac1-f5c0-453e-9a1d-7b31b988b6f9" message="Started: Select unsynced enteties from DB" category="Flow Tracking" />
+		<db:select doc:name="Select unsynced entities" doc:id="c679fe2c-13c2-41a5-a895-ad8bb53d825b" config-ref="Database_Config" >
+			<db:sql ><![CDATA[select entityno
+from   [online].v_svoclient_person
+where  entityType = 1
+and           entityno in 
+(
+              select entityno
+              from   vwEntity
+              where  clientind = 'Y'
+              and           (cifnumber is null or cifnumber = 0 or cifnumber = '-1')
+)
+]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Create response message" doc:id="8efb44f7-e040-4430-a106-e11864d95388" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map
+{
+	entityNumber : $.entityno
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log Call Completed" doc:id="74846035-acce-4d48-8e29-9dc2c2809068" message="Completed: Select unsynced enteties from DB" category="Flow Tracking" />
+	</flow>
+</mule>

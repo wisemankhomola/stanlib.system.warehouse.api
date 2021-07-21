@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="1b8f7c55-8241-4387-bc6d-6210a4a3fa2e" file="${mule.environment}.yaml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cc9bed4b-e41c-40aa-ae7e-40d0041035f9" >
+		<http:listener-connection host="${api.http.listener.host}" port="${api.http.listener.port}" />
+	</http:listener-config>
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="0f5cd5d5-ef3d-40c3-8534-568329513fe1" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="d58277a5-1541-4c46-b67e-afa82f94fea6" >
+		<db:my-sql-connection host="${tlc_sqldb.host}" port="${tlc_sqldb.port}" user="${tlc_sqldb.user}" password="${tlc_sqldb.password}" database="${tlc_sqldb.databaseName}" />
+	</db:config>
+</mule>
