@@ -1,0 +1,32 @@
+#%RAML 1.0
+title: Stanlib.System.Warehouse.API
+version: v1.0
+
+types:
+   getChangedEntities : !include DataTypes/TLC/1.0.0/dataType_EntityList_Get.raml
+   getUnsyncedEntities: !include DataTypes/TLC/1.0.0/dataType_EntityList_Get.raml
+
+uses:
+  restTemplate: /exchange_modules/4022fd0a-400b-4daf-a88b-bcefa7924520/stanlibapifragmentapitemplate/1.0.31/stanlibapifragmentapitemplate.raml
+
+/TLC:
+  /ChangedEntities:
+    type:
+      restTemplate.readOnlyCollection:
+        queryParameters:
+          startDate : 
+            type: date
+            required: false
+          endDate : 
+            type: date
+            required: false
+        singularizedPathName: ChangedEntity
+        getExample: !include Examples/TLC/1.0.0/example_EntitiesList_Get.json
+        getTraits: none
+
+  /UnsyncedEntities:
+    type:
+      restTemplate.readOnlyCollection:
+        singularizedPathName: UnsyncedEntity
+        getExample: !include Examples/TLC/1.0.0/example_EntitiesList_Get.json
+        getTraits: none

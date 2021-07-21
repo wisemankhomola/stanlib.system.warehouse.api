@@ -1,0 +1,1078 @@
+#%RAML 1.0 Library
+usage: This library is used to enforce a standard template for Rest specifications
+
+traits:
+  authentication: 
+    headers:  
+      client_id:
+        required: true
+        type: string
+      client_secret:
+        required: true
+        type: string
+      transaction_id:
+        required: true
+        type: string
+      org_client_id:
+        required: true
+        type: string
+  none:
+    queryParameters:
+    headers:
+        
+resourceTypes:
+               
+  collection:
+    description: Collection of available <<resourcePathName>>.
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get a list of <<resourcePathName>>.
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<resourcePathName>>[]
+              example: <<getExample>>
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<singularizedPathName>>.
+      body:
+        application/json:
+          type: post<<singularizedPathName>>
+          example: <<postExample>>
+      responses:
+        201:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> added successfully
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  collection-array:
+    description: Collection of array available <<resourcePathName>>.
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get a list of <<resourcePathName>>.
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<resourcePathName>>[]
+              example: <<getExample>>
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<resourcePathName>>.
+      body:
+        application/json:
+          type: post<<resourcePathName>>[]
+          example: <<postExample>>
+      responses:
+        201:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<resourcePathName>> added successfully
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  collection-item:
+    description: Item representing a <<singularizedPathName>>
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<singularizedPathName>>
+              example: <<getExample>>
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    put:
+      is: [authentication, <<putTraits>>]
+      description: Update the <<singularizedPathName>> with Id = {Id}
+      body:
+        application/json:
+          type: put<<singularizedPathName>>
+          example: <<putExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> updated successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    delete:
+      is: [authentication, <<deleteTraits>>]
+      description: Delete the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:          
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> deleted successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  readOnlyCollection:
+    description: Collection of available <<resourcePathName>>.
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get a list of <<resourcePathName>>.
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<resourcePathName>>[]
+              example: <<getExample>>
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  postOnlyCollection:
+    description: Add <<resourcePathName>>.
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add new <<resourcePathName>>.
+      body:
+        application/json:
+          type: post<<resourcePathName>>[]
+          example: <<postExample>>
+      responses:
+        201:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<resourcePathName>> added successfully
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  postOnlyItem:
+    description: Add <<singularizedPathName>>.
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<singularizedPathName>>.
+      body:
+        application/json:
+          type: post<<singularizedPathName>>
+          example: <<postExample>>
+      responses:
+        201:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> added successfully
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  postResponseCollection:
+    description: Add <<singularizedPathName>>.
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<singularizedPathName>>.
+      body:
+        application/json:
+          type: post<<singularizedPathName>>
+          example: <<postExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              type: postResponse<<singularizedPathName>>
+              example: <<postResponseExample>>
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  postResponseCollection-array:
+    description: Add <<resourcePathName>>.
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<resourcePathName>>.
+      body:
+        application/json:
+          type: post<<resourcePathName>>[]
+          example: <<postExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              type: postResponse<<resourcePathName>>
+              example: <<postResponseExample>>
+        400:
+          body:     
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:     
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:     
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error
+        503:
+          body:     
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  readOnlyCollection-item:
+    description: Entity representing a <<singularizedPathName>>
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<singularizedPathName>>
+              example: <<getExample>>
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  putOnlyCollection-item:
+    put:
+      is: [authentication, <<putTraits>>]
+      description: Update the <<singularizedPathName>> with Id = {Id}
+      body:
+        application/json:
+          type: put<<singularizedPathName>>
+          example: <<putExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> updated successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  deleteOnlyCollection-item:
+    delete:
+      is: [authentication, <<deleteTraits>>]
+      description: Delete the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:          
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> deleted successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+                
+  patchOnlyCollection-item:
+    patch:
+      is: [authentication, <<patchTraits>>]
+      description: Update the <<singularizedPathName>> with Id = {Id}
+      body:
+        application/json:
+          type: patch<<singularizedPathName>>
+          example: <<patchExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> updated successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  readPatchOnlyCollection-item:
+    description: Entity representing a <<singularizedPathName>>
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<singularizedPathName>>
+              example: <<getExample>>
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    patch:
+      is: [authentication, <<patchTraits>>]
+      description: Update the <<singularizedPathName>> with Id = {Id}
+      body:
+        application/json:
+          type: patch<<singularizedPathName>>
+          example: <<patchExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> updated successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  readPostCollection-item:
+    description: Item representing a <<singularizedPathName>>
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<singularizedPathName>>
+              example: <<getExample>>
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<singularizedPathName>>.
+      body:
+        application/json:
+          type: post<<singularizedPathName>>
+          example: <<postExample>>
+      responses:
+        201:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> added successfully
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+
+  readPostPutCollection-item:
+    description: Item representing a <<singularizedPathName>>
+    get:
+      is: [authentication, <<getTraits>>]
+      description: Get the <<singularizedPathName>> with Id = {Id}
+      responses:
+        200:
+          body:
+            application/json:
+              type: get<<singularizedPathName>>
+              example: <<getExample>>
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    post:
+      is: [authentication, <<postTraits>>]
+      description: Add a new <<singularizedPathName>>.
+      body:
+        application/json:
+          type: post<<singularizedPathName>>
+          example: <<postExample>>
+      responses:
+        201:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> added successfully
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error 
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
+    put:
+      is: [authentication, <<putTraits>>]
+      description: Update the <<singularizedPathName>> with Id = {Id}
+      body:
+        application/json:
+          type: put<<singularizedPathName>>
+          example: <<putExample>>
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example: 
+                Message: <<singularizedPathName>> updated successfully
+        404:
+          body:
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: <<singularizedPathName>> not found.
+        400:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Bad request
+        401:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Unauthorized
+        500:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Internal Server Error  
+        503:
+          body:      
+            application/json:
+              properties:
+                Message: string
+              example:
+                Message: Service Unavailable
